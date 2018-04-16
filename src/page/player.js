@@ -5,7 +5,8 @@ export default class Player extends Component {
 
     duration = null;
     state = {
-        progress: '-'
+        progress: 0,
+        loop: true
     };
 
     componentDidMount() {
@@ -16,17 +17,24 @@ export default class Player extends Component {
                 progress: e.jPlayer.status.currentPercentAbsolute.toFixed(1)
             });
         });
+        // eslint-disable-next-line
+        $('#player').bind($.jPlayer.event.ended, (e) => {
+            // eslint-disable-next-line
+            this.state.loop && $('#player').jPlayer('play', 0);
+        });
     }
 
     componentWillUnmount() {
         // eslint-disable-next-line
         $('#player').unbind($.jPlayer.event.timeupdate);
+        // eslint-disable-next-line
+        $('#player').unbind($.jPlayer.event.ended);
     }
 
     progressChangeHandler(progress) {
         // console.log(progress);
         // eslint-disable-next-line
-        $('#player').jPlayer('play', this.duration * progress)
+        $('#player').jPlayer('play', this.duration * progress);
     }
 
     render() {
